@@ -1,6 +1,17 @@
 const express = require('express');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
+const knex = require('knex');
+
+const db = knex({
+    client: 'pg', //postgresql
+    connection: {
+        host : '127.0.0.1', //localhost
+        user : '',
+        password : '',
+        database : 'smartbrain'
+    }
+});
 
 const app = express();
 
@@ -42,14 +53,11 @@ app.post('/signin', (req, res) => {
 
 app.post('/register', (req, res) => {
     const { email, name, password } = req.body;
-    database.users.push({
-        //need to fix id so it loads the next number each time
-        id: '102',
-        name: name,
+    db('users').insert({
         email: email,
-        entries: 0,
+        name: name,
         joined: new Date()
-    })
+    }).then(console.log)
     res.json(database.users[database.users.length-1]);
 })
 
