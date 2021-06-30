@@ -42,6 +42,9 @@ app.post('/signin', (req, res) => {
     .catch(err => res.status(400).json('wrong credentials'))
 }) 
 
+
+//registers new user on Front End and logs them in
+//not working while trying to register through Postman, throws error.
 app.post('/register', (req, res) => {
     const { email, name, password } = req.body;
     const hash = bcrypt.hashSync(password);
@@ -53,10 +56,10 @@ app.post('/register', (req, res) => {
         .into('login')
         .returning('email')
         .then(loginEmail => {
-            return trx('users')                         //registers new user on Front End and logs them in.
-            .returning('*')                             //not working while trying to register through Postman, throws error.
+            return trx('users')
+            .returning('*')
             .insert({
-                email: loginemail[0],
+                email: loginEmail[0],
                 name: name,
                 joined: new Date()
             })
@@ -82,7 +85,6 @@ app.get('/profile/:id', (req, res) => {
     })
     .catch(err => res.status(400).json('error getting user'))
 })
-
 // maybe add app.put('/profile/:id') to update user info
 // maybe add app.delete('/profile/:id') to delete user
 
@@ -90,7 +92,7 @@ app.put('/image', (req, res) => {
     const { id } = req.body;
    db('users').where('id', '=', id)
    .increment('entries', 1)
-   .returning(entries)
+   .returning('entries')
    .then(entries => {
        res.json(entries[0]);
    })
