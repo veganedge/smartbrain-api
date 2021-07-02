@@ -34,5 +34,5 @@ app.post('/imageurl', (req, res) => { image.handleApiCall(req, res) })
 // maybe add app.delete('/profile/:id') to delete user
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log('app is running on port:'{process.env.PORT});
+    console.log('app is running on port: ${process.env.PORT}');
 })
